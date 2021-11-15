@@ -7,7 +7,7 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then(() => console.log("Database connected!"))
+  .then(() => console.log("URLS collection connected!"))
   .catch((err) => console.log(err));
 
 const UrlSchema = mongoose.Schema({

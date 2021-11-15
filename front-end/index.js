@@ -4,16 +4,6 @@ const resultArea = document.getElementById("new URL");
 const statsInput = document.getElementById("stats input");
 const showStatsButton = document.getElementById("submit to show stats");
 const infoDiv = document.getElementById("info area");
-// function createCopyButton() {
-//   const copy = document.createElement("button");
-//   copy.id = "copy-button";
-//   copy.type = "button";
-//   copy.innerText = "copy 📝";
-//   copy.onclick = "copyHandler()";
-//   return copy;
-// }
-// const copyButton = createCopyButton();
-const server = "/";
 
 const shortener = async () => {
   try {
@@ -61,8 +51,3 @@ const presentStats = async () => {
   }
 };
 showStatsButton.addEventListener("click", presentStats);
-
-// const copyHandler = () => {
-//   resultArea.select();
-//   navigator.clipboard.writeText(infoDiv.value);
-// };
