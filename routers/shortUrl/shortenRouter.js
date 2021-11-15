@@ -1,11 +1,13 @@
 const express = require("express");
-const Database = require("../classes");
+const URLS = require("../../model/URLS");
 const router = express.Router();
+
 router.post("/", (req, res) => {
   req.on("data", (data) => {
-    const url = JSON.parse(data);
-    const shortUrl = new Database(url);
-    res.send(shortUrl);
+    const URL = JSON.parse(data);
+    const short = new URLS({ URL }).save().then((result) => {
+      res.send(res.send(result));
+    });
   });
 });
 module.exports = router;

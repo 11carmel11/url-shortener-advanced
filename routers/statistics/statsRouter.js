@@ -1,11 +1,11 @@
 const express = require("express");
-const Database = require("../classes");
 const router = express.Router();
+const URLS = require("../../model/URLS");
 
-router.get("/:hash", (req, res) => {
+router.get("/:hash", async (req, res) => {
   try {
     const { hash } = req.params;
-    const stats = Database.getStats(hash);
+    const stats = await URLS.findOne({ URL: hash });
     res.json(stats);
   } catch (error) {
     res.status(404).send("page not found");
