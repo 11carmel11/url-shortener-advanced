@@ -19,6 +19,6 @@ signUpButton.addEventListener("click", async () => {
     );
     window.location = data;
   } catch (error) {
-    notyf.error("OOPS, something went wrong...");
+    notyf.error(error.response.data);
   }
 });

@@ -8,7 +8,7 @@ router.get("/:hash", async (req, res) => {
     const result = await URLS.findOne({ shortUrl_id: hash });
     let { counter, URL } = result;
     counter++;
-    const a = await URLS.findOneAndUpdate({ shortUrl_id: hash }, { counter });
+    await URLS.findOneAndUpdate({ shortUrl_id: hash }, { counter });
     res.redirect(URL);
   } catch (error) {
     res.status(404).send("page not found");

@@ -19,7 +19,6 @@ const UserSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  URLS: [{ type: String }],
   creationDate: {
     type: String,
     default: new Date().toLocaleString(),

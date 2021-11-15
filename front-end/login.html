@@ -68,6 +68,17 @@
         text-align: center;
       }
     </style>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+      integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css"
+    />
+    <title>login</title>
   </head>
   <body>
     <form action="/action_page.php">
@@ -81,7 +92,7 @@
           type="text"
           placeholder="Enter Email"
           name="email"
-          id="email"
+          id="email-login"
           required
         />
 
@@ -90,13 +101,17 @@
           type="password"
           placeholder="Enter Password"
           name="psw"
-          id="psw"
+          id="psw-login"
           required
         />
 
         <hr />
-        <button type="submit" class="loginbtn">login</button>
+        <button type="button" id="loginButton" class="loginbtn">login</button>
+        <a href="/register">don't have an account? sign up!</a>
       </div>
     </form>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+    <script src="login.js" defer></script>
   </body>
 </html>
