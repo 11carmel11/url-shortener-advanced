@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const shortid = require("shortid");
+require("dotenv").config();
 
 mongoose
   .connect(process.env.DATABASE, {
@@ -15,7 +16,7 @@ const UrlSchema = mongoose.Schema({
     required: true,
   },
   creationDate: {
-    type: Date,
+    type: String,
     default: new Date().toLocaleString(),
   },
   counter: {
