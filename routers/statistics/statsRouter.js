@@ -8,7 +8,7 @@ router.get("/:hash", async (req, res) => {
     const stats = await URLS.findOne({ shortUrl_id: hash });
     res.json(stats);
   } catch (error) {
-    res.status(404).send("page not found");
+    res.sendStatus(404);
   }
 });
 

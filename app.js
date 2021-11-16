@@ -48,7 +48,7 @@ app.get("/signin", async (req, res) => {
       }
     );
     res.cookie("token", token, { maxAge: 300000 });
-    res.end();
+    res.send("/page");
   } else {
     res.status(400).json("The Email does not match the password");
   }

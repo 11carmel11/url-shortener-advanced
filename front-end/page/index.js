@@ -4,21 +4,27 @@ const resultArea = document.getElementById("new URL");
 const statsInput = document.getElementById("stats input");
 const showStatsButton = document.getElementById("submit to show stats");
 const infoDiv = document.getElementById("info area");
+const server = "http://localhost:3000/";
+const notyf = new Notyf({ duration: 3000, dismissible: true });
 
 const shortener = async () => {
   try {
     const urlToChange = urlInput.value;
     if (!urlToChange) return;
-    const response = await axios.post(
+    const { data } = await axios.post(
       `${server}shorten`,
       JSON.stringify(urlToChange)
     );
-    const { shortUrl_id } = response.data;
+    if (!data.hasOwnProperty("_id")) {
+      window.location = "/403";
+      return;
+    }
+    const { shortUrl_id } = data;
     urlInput.value = "";
-    const newRL = `https://newrl.herokuapp.com/original/${shortUrl_id}`;
+    const newRL = `http://localhost:3000/original/${shortUrl_id}`;
     resultArea.innerHTML = `<a target="_blank" href=${newRL}>${newRL}</a>`;
   } catch (error) {
-    alert("oops, something went wrong...");
+    notyf.error("oops, something went wrong...");
   }
 };
 
@@ -31,6 +37,10 @@ const presentStats = async () => {
     const dividedUrl = shortenedUrl.split("/");
     const uniqueHash = dividedUrl[dividedUrl.length - 1];
     const { data } = await axios.get(`${server}statistic/${uniqueHash}`);
+    if (!data.hasOwnProperty("_id")) {
+      window.location = "/403";
+      return;
+    }
     infoDiv.innerText = `your shortened URL was created at ${
       data.creationDate
     } \n from ${data.URL}, \n and it was entered ${data.counter} ${
@@ -42,12 +52,7 @@ const presentStats = async () => {
       infoDiv.innerText = "";
     }, 10000);
   } catch (error) {
-    infoDiv.innerText = `sorry, ${error.response.data}`;
-    infoDiv.classList.add("alert", "alert-danger");
-    setTimeout(() => {
-      infoDiv.classList.remove("alert", "alert-danger");
-      infoDiv.innerText = "";
-    }, 50000);
+    notyf.error(`sorry, ${error.response.data}`);
   }
 };
 showStatsButton.addEventListener("click", presentStats);

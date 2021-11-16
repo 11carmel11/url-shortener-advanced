@@ -11,7 +11,7 @@ router.get("/:hash", async (req, res) => {
     await URLS.findOneAndUpdate({ shortUrl_id: hash }, { counter });
     res.redirect(URL);
   } catch (error) {
-    res.status(404).send("page not found");
+    res.redirect("/404");
   }
 });
 module.exports = router;

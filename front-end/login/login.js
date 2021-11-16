@@ -10,7 +10,7 @@ loginButton.addEventListener("click", async () => {
       notyf.error("please enter email and password");
       return;
     }
-    await axios.get(
+    const { data } = await axios.get(
       `${server}signin?email=${emailLogin.value}&&password=${passwordLogin.value}`
     );
     window.location = "/page";

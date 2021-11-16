@@ -1,5 +1,6 @@
 const path = require("path");
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
 const secret = process.env.SECRET;
 
 const middleWare = (req, res, next) => {
@@ -24,7 +25,7 @@ const middleWare = (req, res, next) => {
     const { cookies } = req;
     if (!cookies.token) return res.redirect("/403");
     jwt.verify(cookies.token, secret, (err) => {
-      if (err) return res.sendStatus(498);
+      if (err) return res.redirect("/498");
     });
   }
   if (filePath.includes(currentPath)) {
