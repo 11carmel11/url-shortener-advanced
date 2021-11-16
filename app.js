@@ -16,15 +16,35 @@ app.use(cookieParser());
 app.use(express.static(path.resolve("./front-end")));
 
 app.get("/", (req, res) => {
-  res.sendFile(path.resolve("./front-end/login.html"));
+  res.redirect("/login");
 });
 
-app.get("/login", (req, res) => {
-  res.sendFile(path.resolve("./front-end/login.html"));
-});
-
-app.get("/register", (req, res) => {
-  res.sendFile(path.resolve("./front-end/register.html"));
+app.use("/:currentPath", (req, res, next) => {
+  const { currentPath } = req.params;
+  const existPath = [
+    "login",
+    "register",
+    "page",
+    "403",
+    "404",
+    "shorten",
+    "statistic",
+    "original",
+  ];
+  if (!existPath.includes(currentPath)) return res.redirect("/404");
+  const filePath = ["login", "register", "page", "403", "404"];
+  const needAuth = ["page", "shorten", "statistic"];
+  if (needAuth.includes(currentPath)) {
+    const { cookies } = req;
+    if (!cookies.token) return res.redirect("/403");
+    jwt.verify(cookies.token, secret, (err) => {
+      if (err) return res.sendStatus(498);
+    });
+  }
+  if (filePath.includes(currentPath)) {
+    return res.sendFile(path.resolve(`./front-end/${currentPath}.html`));
+  }
+  next();
 });
 
 app.post("/signup", (req, res) => {
@@ -34,15 +54,11 @@ app.post("/signup", (req, res) => {
       const { email, password } = info;
       const newUser = new Users({ email, password });
       await Users.insertMany([newUser]);
-      res.send("./front-end/login.html");
+      res.send("/login");
     } catch (error) {
       res.status(403).json("The Email you've entered is taken");
     }
   });
-});
-
-app.get("/page", (req, res) => {
-  res.sendFile(path.resolve("./front-end/page.html"));
 });
 
 app.get("/signin", async (req, res) => {
@@ -56,23 +72,13 @@ app.get("/signin", async (req, res) => {
         expiresIn: "300s",
       }
     );
-    res.cookie("token", token);
+    res.cookie("token", token, { maxAge: 300000 });
     res.send("/page");
-    // console.log(path.resolve("./front-end/page.html"));
-    // res.sendFile(path.resolve("./front-end/page.html"));
   } else {
-    res.status(404).json("The Email does not match the password");
+    res.status(400).json("The Email does not match the password");
   }
 });
 
-// app.use((req, res, next) => {
-//   const { cookies } = req;
-//   if (!cookies.token) return res.sendStatus(500);
-//   jwt.verify(cookies.token, secret, (err, user) => {
-//     if (err) return res.sendStatus(403);
-//     next();
-//   });
-// });
 app.use("/shorten", shortenRouter);
 app.use("/original", extendRouter);
 app.use("/statistic", statsRouter);
