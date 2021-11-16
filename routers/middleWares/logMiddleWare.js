@@ -17,6 +17,7 @@ const middleWare = (req, res, next) => {
     "signup",
     "signin",
     "498",
+    "name",
   ];
   if (!existPath.includes(currentPath)) return res.redirect("/404");
   const filePath = ["login", "register", "page", "403", "404", "498"];

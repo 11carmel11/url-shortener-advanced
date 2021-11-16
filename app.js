@@ -54,6 +54,12 @@ app.get("/signin", async (req, res) => {
   }
 });
 
+app.get("/name", (req, res) => {
+  const { token } = req.cookies;
+  const { email } = jwt.decode(token);
+  res.send(email.split("@")[0]);
+});
+
 app.use("/shorten", shortenRouter);
 app.use("/original", extendRouter);
 app.use("/statistic", statsRouter);

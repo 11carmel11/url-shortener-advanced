@@ -5,8 +5,28 @@ const statsInput = document.getElementById("stats input");
 const showStatsButton = document.getElementById("submit to show stats");
 const infoDiv = document.getElementById("info area");
 const server = "http://localhost:3000/";
-const notyf = new Notyf({ duration: 3000, dismissible: true });
+const notyf = new Notyf({
+  duration: 3000,
+  dismissible: true,
+  types: [
+    {
+      type: "greetings",
+      background: "brown",
+      duration: 1300,
+      dismissible: false,
+      position: { x: "center", y: "top" },
+    },
+  ],
+});
 
+const greetingUser = async () => {
+  const { data } = await axios.get(`${server}name`);
+  notyf.open({
+    type: "greetings",
+    message: `<h4>hello ${data}!</h4>`,
+  });
+};
+greetingUser();
 const shortener = async () => {
   try {
     const urlToChange = urlInput.value;
