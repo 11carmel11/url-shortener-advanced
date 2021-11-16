@@ -5,6 +5,7 @@ const path = require("path");
 const shortenRouter = require("./routers/shortUrl/shortenRouter");
 const extendRouter = require("./routers/extendUrl/extendRouter");
 const statsRouter = require("./routers/statistics/statsRouter");
+const logMiddleWare = require("./routers/middleWares/logMiddleWare");
 const Users = require("./model/users");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
@@ -15,36 +16,10 @@ app.use(cors());
 app.use(cookieParser());
 app.use(express.static(path.resolve("./front-end")));
 
+app.use("/:currentPath", logMiddleWare);
+
 app.get("/", (req, res) => {
   res.redirect("/login");
-});
-
-app.use("/:currentPath", (req, res, next) => {
-  const { currentPath } = req.params;
-  const existPath = [
-    "login",
-    "register",
-    "page",
-    "403",
-    "404",
-    "shorten",
-    "statistic",
-    "original",
-  ];
-  if (!existPath.includes(currentPath)) return res.redirect("/404");
-  const filePath = ["login", "register", "page", "403", "404"];
-  const needAuth = ["page", "shorten", "statistic"];
-  if (needAuth.includes(currentPath)) {
-    const { cookies } = req;
-    if (!cookies.token) return res.redirect("/403");
-    jwt.verify(cookies.token, secret, (err) => {
-      if (err) return res.sendStatus(498);
-    });
-  }
-  if (filePath.includes(currentPath)) {
-    return res.sendFile(path.resolve(`./front-end/${currentPath}.html`));
-  }
-  next();
 });
 
 app.post("/signup", (req, res) => {
@@ -73,7 +48,7 @@ app.get("/signin", async (req, res) => {
       }
     );
     res.cookie("token", token, { maxAge: 300000 });
-    res.send("/page");
+    res.end();
   } else {
     res.status(400).json("The Email does not match the password");
   }

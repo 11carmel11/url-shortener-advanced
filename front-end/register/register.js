@@ -10,14 +10,14 @@ signUpButton.addEventListener("click", async () => {
       notyf.error("please enter email and password");
       return;
     }
-    const { data } = await axios.post(
+    await axios.post(
       `${server}signup`,
       JSON.stringify({
         email: emailRegister.value,
         password: passwordRegister.value,
       })
     );
-    window.location = data;
+    window.location = "/login";
   } catch (error) {
     notyf.error(error.response.data);
   }
